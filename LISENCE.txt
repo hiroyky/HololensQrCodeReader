@@ -2,7 +2,7 @@
 Hololens QR Code Reader
 MIT License
 
-Copyright (c) 2016 Hirokazu Yokoyama
+Copyright (c) 2017 Hirokazu Yokoyama
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
