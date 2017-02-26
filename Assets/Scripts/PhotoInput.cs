@@ -36,7 +36,7 @@ public class PhotoInput : MonoBehaviour {
 
     void onPhotoModeStarted(PhotoCapture.PhotoCaptureResult result) {
         if (result.success) {
-            saveToFile();
+            //saveToFile();
             photoCapture.TakePhotoAsync(onCapturedPhotoToMemory);
         } else {
             Debug.LogError("Unable to start photo mode");
@@ -58,8 +58,8 @@ public class PhotoInput : MonoBehaviour {
         List<byte> trimmedBuffer = trimmingQrSight(buffer, 4);
 
         // QR照準内の画像を保存
-        //Texture2D tex = createTexture(trimmedBuffer, cameraParameters.cameraResolutionWidth, cameraParameters.cameraResolutionHeight);
-        //saveToFile(tex);
+        Texture2D tex = createTexture(trimmedBuffer, cameraParameters.cameraResolutionWidth, cameraParameters.cameraResolutionHeight);
+        saveToFile(tex);
 
         if (callback != null) {
             callback(new List<byte>(trimmedBuffer), cameraParameters.cameraResolutionWidth, cameraParameters.cameraResolutionHeight);
@@ -89,6 +89,8 @@ public class PhotoInput : MonoBehaviour {
                 position.y - scale.y / 2,
                 position.z);
 
+#if false
+        /* Rayを使うかどうかが悩みどころ；；*/
         RaycastHit leftTopHit, rightTopHit, leftBottomHit, rightBottomHit;
         Physics.Raycast(leftTop, direction, out leftTopHit);
         Physics.Raycast(rightTop, direction, out rightTopHit);
@@ -100,7 +102,13 @@ public class PhotoInput : MonoBehaviour {
         var rightTopScreen = Camera.main.WorldToScreenPoint(rightTopHit.point);
         var leftBottomScreen = Camera.main.WorldToScreenPoint(leftBottomHit.point);
         var rightBottomScreen = Camera.main.WorldToScreenPoint(rightBottomHit.point);
-
+#else
+        // ワールド座標系を投影座標系に変換
+        var leftTopScreen = Camera.main.WorldToScreenPoint(leftTop);
+        var rightTopScreen = Camera.main.WorldToScreenPoint(rightTop);
+        var leftBottomScreen = Camera.main.WorldToScreenPoint(leftBottom);
+        var rightBottomScreen = Camera.main.WorldToScreenPoint(rightBottom);
+#endif
         // 投影座標系を，PhotoCaptureが撮影する画像上での座標に変換
         int leftSide = (int)(leftTopScreen.x / (float)Camera.main.pixelWidth * cameraParameters.cameraResolutionWidth);
         int rightSide = (int)(rightTopScreen.x / (float)Camera.main.pixelWidth * cameraParameters.cameraResolutionWidth);
