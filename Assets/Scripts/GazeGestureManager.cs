@@ -36,7 +36,10 @@ public class GazeGestureManager : MonoBehaviour {
         failedAudioSource.playOnAwake = false;
     }
 
-    void GestureRecognizer_TappedEvent(InteractionSourceKind source, int tapCount, Ray headRay) {                
+    private void Update() {
+    }
+
+    void GestureRecognizer_TappedEvent(InteractionSourceKind source, int tapCount, Ray headRay) {
         photoInput.CapturePhotoAsync(onPhotoCaptured);
     }
 
